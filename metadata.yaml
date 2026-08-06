@@ -2,5 +2,5 @@ homepage: "https://configcat.com"
 documentation: "https://configcat.com/docs"
 
 versions:
-  - sha: REPLACE_WITH_FULL_40_CHARACTER_GIT_COMMIT_SHA
+  - sha: 68c34cfd7c413f17dbc9f83d2a453f0e4c159ec9
     changeNotes: Initial release. Load ConfigCat JavaScript SDK via Google Tag Manager.
