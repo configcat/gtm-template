@@ -2,5 +2,5 @@ homepage: "https://configcat.com"
 documentation: "https://github.com/configcat/gtm-template"
 
 versions:
-  - sha: 68c34cfd7c413f17dbc9f83d2a453f0e4c159ec9
+  - sha: 10e0f2b9a034782c3c64a14decaf001b60cea26e
     changeNotes: Initial release. Load ConfigCat JavaScript SDK via Google Tag Manager.
