@@ -49,11 +49,11 @@ ConfigCat is a feature flag and configuration management service that lets you s
 To use feature flags, first create a **Custom Event** called "ConfigCatLoaded". 
 
 1. In Google Tag Manager, go to **Triggers** -> **New** -> **Trigger Configuration**.
-2. Choose **Custom Event**.
-3. Enter "ConfigCatLoaded" Event name (the configcat tag will push this event on the data layer when the it's loaded).
-4. Name the **Custom Event** as "ConfigCatLoaded".
+2. Select **Custom Event**.
+3. Enter "ConfigCatLoaded" as the event name. The ConfigCat tag will push this event to the data layer when it has loaded.
+4. Name the **Custom Event** trigger "ConfigCatLoaded".
 
-Now you can create a separate **Custom HTML** tag with your logic and tigger it the right now generated "ConfigCatLoaded" **Custom Event**.
+Now you can create a separate **Custom HTML** tag with your logic and tigger it with the "ConfigCatLoaded" **Custom Event** you just created.
 
 ```html
 <script>
