@@ -74,8 +74,8 @@ Now you can create a separate **Custom HTML** tag with your logic and tigger it 
     }).then(function (value) {
       // Example: Add a class when feature is enabled
       var element = document.getElementById("pricing");
-      if (value) {
-        if (element) element.classList.add("black-friday-discount");
+      if (value && element) {
+        element.classList.add("black-friday-discount");
       }
     });
   })();
