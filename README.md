@@ -70,7 +70,7 @@ Now you can create a separate **Custom HTML** tag with your logic and tigger it 
 
     // Waiting for the feature flag configuration is downloaded and ready to use
     client.waitForReady().then(function () {
-      return client.getValueAsync('ShowBlackFirdayDiscount', false);
+      return client.getValueAsync('ShowBlackFridayDiscount', false);
     }).then(function (value) {
       // Example: Add a class when feature is enabled
       var element = document.getElementById("pricing");
@@ -86,7 +86,6 @@ Now you can create a separate **Custom HTML** tag with your logic and tigger it 
 https://configcat.com/support
 
 ## About ConfigCat
-- [Official ConfigCat SDKs for other platforms](https://github.com/configcat)
 - [Documentation](https://configcat.com/docs)
 - [Blog](https://configcat.com/blog)
 
