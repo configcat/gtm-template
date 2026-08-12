@@ -204,11 +204,16 @@ const onScriptLoaded = () => {
     dataGovernance: useEuCdn ? configcat.DataGovernance.EuOnly : configcat.DataGovernance.Global
   };
   
-  if (data.pollingMode === 'AutoPoll') {
+  let pollingMode;
+  if (data.pollingMode === 'ManualPoll') {
+    pollingMode = configcat.PollingMode.ManualPoll;
+  } else if (data.pollingMode === 'LazyLoad') {
+    pollingMode = configcat.PollingMode.LazyLoad;
+    options.cacheTimeToLiveSeconds = makeNumber(data.cacheTimeToLiveSeconds || 60);
+  } else {
+    pollingMode = configcat.PollingMode.AutoPoll;
     options.pollIntervalSeconds = makeNumber(data.pollIntervalSeconds || 60);
     options.maxInitWaitTimeSeconds = makeNumber(data.maxInitWaitTimeSeconds || 5);
-  } else if (data.pollingMode === 'LazyLoad') {
-    options.cacheTimeToLiveSeconds = makeNumber(data.cacheTimeToLiveSeconds || 60);
   }
   
   if (data.baseUrl) {
@@ -216,7 +221,7 @@ const onScriptLoaded = () => {
   }
   
   // Init ConfigCat Client
-  callInWindow('configcat.getClient', sdkKey, configcat.PollingMode.AutoPoll, options);
+  callInWindow('configcat.getClient', sdkKey, pollingMode, options);
   
   if (queryPermission('access_globals', 'readwrite', 'dataLayer')) {
     dataLayerPush({ event: 'ConfigCatLoaded' });
