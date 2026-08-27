@@ -178,7 +178,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 
 const injectScript = require('injectScript');
 const copyFromWindow = require('copyFromWindow');
-const callInWindow = require('callInWindow');
+const setInWindow = require('setInWindow');
 const makeNumber = require('makeNumber');
 const createQueue = require('createQueue');
 const queryPermission = require('queryPermission');
@@ -220,9 +220,15 @@ const onScriptLoaded = () => {
     options.baseUrl = data.baseUrl;
   }
   
-  // Init ConfigCat Client
-  callInWindow('configcat.getClient', sdkKey, pollingMode, options);
-  
+  // Store init parameters
+  if (queryPermission('access_globals', 'write', 'configcatInitParams')) {
+    setInWindow('configcatInitParams', {
+      sdkKey: sdkKey,
+      pollingMode: pollingMode,
+      options: options
+    }, true);
+  }
+    
   if (queryPermission('access_globals', 'readwrite', 'dataLayer')) {
     dataLayerPush({ event: 'ConfigCatLoaded' });
   }
@@ -380,19 +386,19 @@ ___WEB_PERMISSIONS___
                 "mapValue": [
                   {
                     "type": 1,
-                    "string": "configcat.getClient"
-                  },
-                  {
-                    "type": 8,
-                    "boolean": false
-                  },
-                  {
-                    "type": 8,
-                    "boolean": false
+                    "string": "configcatInitParams"
                   },
                   {
                     "type": 8,
                     "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": true
+                  },
+                  {
+                    "type": 8,
+                    "boolean": false
                   }
                 ]
               }
@@ -436,9 +442,9 @@ scenarios:
       onSuccess();
     });
 
-    let capturedArgs = null;
-    mock('callInWindow', function(path, sdkKey, pollingMode, options) {
-      capturedArgs = { path: path, sdkKey: sdkKey, pollingMode: pollingMode, options: options };
+    let storedInitParams = null;
+    mock('setInWindow', function(name, value, overrideExisting) {
+      storedInitParams = { name: name, value: value, overrideExisting: overrideExisting };
     });
 
 
@@ -446,12 +452,14 @@ scenarios:
     runCode(mockData);
 
     // Verify that the tag finished successfully.
-    assertThat(capturedArgs).isDefined();
-    assertThat(capturedArgs.path).isEqualTo('configcat.getClient');
-    assertThat(capturedArgs.sdkKey).isEqualTo('sdk-test');
-    assertThat(capturedArgs.pollingMode).isEqualTo(0);
-    assertThat(capturedArgs.options.pollIntervalSeconds).isEqualTo(95);
-    assertThat(capturedArgs.options.dataGovernance).isEqualTo(1);
+    assertThat(storedInitParams).isDefined();
+    assertThat(storedInitParams.name).isEqualTo('configcatInitParams');
+    assertThat(storedInitParams.value.sdkKey).isEqualTo('sdk-test');
+    assertThat(storedInitParams.value.pollingMode).isEqualTo(0);
+    assertThat(storedInitParams.value.options.pollIntervalSeconds).isEqualTo(95);
+    assertThat(storedInitParams.value.options.dataGovernance).isEqualTo(1);
+    assertThat(storedInitParams.overrideExisting).isEqualTo(true);
+
     assertApi('gtmOnSuccess').wasCalled();
 - name: Call gtmOnFailure when script fails to load
   code: |-

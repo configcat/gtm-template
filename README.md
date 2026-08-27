@@ -58,15 +58,22 @@ Now you can create a separate **Custom HTML** tag with your logic and tigger it 
 ```html
 <script>
   (function () {
-    var sdkKey = '#YOUR-SDK-KEY#';
+    var init = window.configcatInit;
 
-    if (!window.configcat) {
+    if (!window.configcat || !init) {
       console.warn('[ConfigCat] SDK not loaded');
       return;
     }
 
-    // Same SDK key returns the shared instance created by the init tag
-    var client = window.configcat.getClient(sdkKey);
+    if (!window.configcatClient) {
+      window.configcatClient = window.configcat.getClient(
+        init.sdkKey,
+        window.configcat.PollingMode[init.pollingMode],
+        init.options
+      );
+    }
+
+    var client = window.configcatClient;
 
     // Waiting for the feature flag configuration is downloaded and ready to use
     client.waitForReady().then(function () {
