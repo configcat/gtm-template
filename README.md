@@ -58,17 +58,17 @@ Now you can create a separate **Custom HTML** tag with your logic and tigger it 
 ```html
 <script>
   (function () {
-    var init = window.configcatInit;
+    var initParams = window.configcatInitParams;
 
-    if (!window.configcat || !init) {
+    if (!window.configcat || !initParams) {
       console.warn('[ConfigCat] SDK not loaded');
       return;
     }
 
     if (!window.configcatClient) {
       window.configcatClient = window.configcat.getClient(
-        init.sdkKey,
-        window.configcat.PollingMode[init.pollingMode],
+        initParams.sdkKey,
+        initParams.PollingMode,
         init.options
       );
     }
